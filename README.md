@@ -68,6 +68,39 @@ FOVCircle.Color = Color3.fromRGB(255, 0, 0)
 FOVCircle.Transparency = 1
 FOVCircle.Visible = true
 
+-- Função para adicionar ESP
+local function addESP(player)
+    if player ~= localplayer then
+        player.CharacterAdded:Connect(function(character)
+            if character:FindFirstChild("Head") then
+                local highlight = Instance.new("Highlight")
+                highlight.Parent = character
+                highlight.FillColor = Color3.fromRGB(255, 0, 0) -- Vermelho
+                highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- Branco
+                highlight.FillTransparency = 0.5
+                highlight.OutlineTransparency = 0
+            end
+        end)
+
+       
+        if player.Character and player.Character:FindFirstChild("Head") then
+            local highlight = Instance.new("Highlight")
+            highlight.Parent = player.Character
+            highlight.FillColor = Color3.fromRGB(255, 0, 0) -- Vermelho
+            highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- Branco
+            highlight.FillTransparency = 0.5
+            highlight.OutlineTransparency = 0
+        end
+    end
+end
+
+-- Adicionar ESP a todos os jogadores
+for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+    addESP(player)
+end
+
+game:GetService("Players").PlayerAdded:Connect(addESP)
+
 -- Wallcheck (Verifica se há parede entre você e o alvo)
 local function isVisible(target)
     if not _G.wallcheck then return true end
@@ -79,7 +112,7 @@ local function isVisible(target)
     return hit == nil or hit:IsDescendantOf(target.Character)
 end
 
-
+-- Aimbot: Encontra o inimigo mais próximo dentro do FOV e com visão livre
 local function closestplayer()
     local dist = math.huge
     local target = nil
@@ -96,7 +129,7 @@ local function closestplayer()
     return target
 end
 
-
+-- Alternar Aimbot com tecla T
 UIS.InputBegan:Connect(function(inp)
     if inp.KeyCode == Enum.KeyCode.T then
         _G.aimbot = not _G.aimbot
@@ -104,7 +137,7 @@ UIS.InputBegan:Connect(function(inp)
     end
 end)
 
-
+-- Alternar WallCheck com botão
 WallCheckButton.MouseButton1Click:Connect(function()
     _G.wallcheck = not _G.wallcheck
     WallCheckButton.BackgroundColor3 = _G.wallcheck and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
@@ -147,6 +180,7 @@ RunService.RenderStepped:Connect(function()
         Frame.Position = UDim2.new(0, UIS:GetMouseLocation().X - DragOffset.X, 0, UIS:GetMouseLocation().Y - DragOffset.Y)
     end
 
+    -- Atualizar alvo do aimbot
     if _G.aimbot then
         targetPlayer = closestplayer()
         if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
