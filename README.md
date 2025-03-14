@@ -32,7 +32,7 @@ Frame.Active = true
 DragButton.Parent = Frame
 DragButton.Size = UDim2.new(1, 0, 0, 20)
 DragButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-DragButton.Text = "Arraste para mover"
+DragButton.Text = ""
 DragButton.TextColor3 = Color3.new(1, 1, 1)
 
 AimbotStatus.Parent = Frame
