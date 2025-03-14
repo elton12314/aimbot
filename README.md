@@ -12,7 +12,7 @@ local Dragging = false
 local MovingUI = false
 local DragOffset
 
--- Criar UI
+
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local DragButton = Instance.new("TextButton")
@@ -62,7 +62,7 @@ Slider.Position = UDim2.new(0, 10, 0, 110)
 Slider.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 Slider.Text = ""
 
--- Criar círculo de FOV
+
 local FOVCircle = Drawing.new("Circle")
 FOVCircle.Thickness = 2
 FOVCircle.Filled = false
@@ -70,7 +70,7 @@ FOVCircle.Color = Color3.fromRGB(255, 0, 0)
 FOVCircle.Transparency = 1
 FOVCircle.Visible = true
 
--- Função para verificar se um jogador está atrás de uma parede
+
 local function isBehindWall(player)
     local char = player.Character
     if not char or not localplayer.Character then return false end
@@ -108,7 +108,7 @@ local function applyESP(player)
     highlight.Parent = player.Character
 end
 
--- Função para verificar visibilidade entre os jogadores
+
 local function isVisible(target)
     if not _G.wallcheck then return true end
     local origin = camera.CFrame.Position
@@ -119,7 +119,7 @@ local function isVisible(target)
     return hit == nil or hit:IsDescendantOf(target.Character)
 end
 
--- Aimbot: Encontra o inimigo mais próximo dentro do FOV e com visão livre
+
 local function closestplayer()
     local dist = math.huge
     local target = nil
@@ -136,7 +136,7 @@ local function closestplayer()
     return target
 end
 
--- Alternar Aimbot com tecla T
+
 UIS.InputBegan:Connect(function(inp)
     if inp.KeyCode == Enum.KeyCode.T then
         _G.aimbot = not _G.aimbot
@@ -144,14 +144,14 @@ UIS.InputBegan:Connect(function(inp)
     end
 end)
 
--- Alternar WallCheck com botão
+
 WallCheckButton.MouseButton1Click:Connect(function()
     _G.wallcheck = not _G.wallcheck
     WallCheckButton.BackgroundColor3 = _G.wallcheck and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
     WallCheckButton.Text = _G.wallcheck and "WallCheck: ON" or "WallCheck: OFF"
 end)
 
--- Slider de FOV
+
 Slider.MouseButton1Down:Connect(function()
     Dragging = true
 end)
@@ -173,7 +173,7 @@ RunService.RenderStepped:Connect(function()
     FOVCircle.Position = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
     FOVCircle.Radius = FOV
 
-    -- Atualizar valor do FOV pelo slider
+ 
     if Dragging then
         local MousePos = UIS:GetMouseLocation().X
         local SliderPos = math.clamp(MousePos - Frame.AbsolutePosition.X, 0, 180)
@@ -182,12 +182,12 @@ RunService.RenderStepped:Connect(function()
         TextLabel.Text = "FOV: " .. FOV
     end
 
-    -- Permitir mover a interface
+    
     if MovingUI then
         Frame.Position = UDim2.new(0, UIS:GetMouseLocation().X - DragOffset.X, 0, UIS:GetMouseLocation().Y - DragOffset.Y)
     end
 
-    -- Atualizar alvo do aimbot
+    
     if _G.aimbot then
         targetPlayer = closestplayer()
         if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
@@ -195,7 +195,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- Atualizar ESP em tempo real
+    
     for _, player in pairs(Players:GetPlayers()) do
         if player ~= localplayer and player.Character then
             applyESP(player)
@@ -224,7 +224,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
--- Adicionar novos jogadores que entrarem no jogo
+
 Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function()
         task.wait(1)  -- Pequeno delay para garantir que o personagem seja carregado
